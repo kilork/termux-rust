@@ -25,10 +25,40 @@ set bell-style none
 EOF
 fi
 
-if [ ! -e ~/install_rls.sh ]; then
-	wget https://gist.githubusercontent.com/rrichardson/c6b90ad7e6f5c41e102753dde7c663a6/raw/35789dd30043a49ca55c5651484eb19b918b77ea/install_rls.sh
-	bash install_rls.sh
+if [ ! -e ~/.vimrc ]; then
+	mkdir -p ~/.vim/bundle
+
+	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+	cat > ~/.vim/plugins.vim << EOF
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'editorconfig/editorconfig-vim'
+Plugin 'itchyny/lightline.vim'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+Plugin 'mattn/emmet-vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'tpope/vim-eunuch'
+Plugin 'tpope/vim-surround'
+Plugin 'rust-lang/rust.vim'
+Plugin 'prabirshrestha/async.vim'
+Plugin 'prabirshrestha/vim-lsp'
+Plugin 'prabirshrestha/asyncomplete.vim'
+Plugin 'prabirshrestha/asyncomplete-lsp.vim'
+Plugin 'w0rp/ale'
+call vundle#end()
+
+filetype plugin indent on
+EOF
 	cat >> ~/.vimrc << EOF
+so ~/.vim/plugins.vim
+set encoding=utf-8
+
 if executable('rls')
     au User lsp_setup call lsp#register_server({
         \ 'name': 'rls',
