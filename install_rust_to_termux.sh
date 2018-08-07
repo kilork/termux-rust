@@ -39,10 +39,12 @@ endif
 EOF
 fi
 
-if [ ! -e ~/rust ]; then
-	mkdir ~/rust
+RUST_VERSION=`rustc --version | cut -f2 -d" "`
+if [ ! -e ~/rust/rustc-${RUST_VERSION}-src ]; then
+	mkdir -p ~/rust
 	cd ~/rust
-	wget https://static.rust-lang.org/dist/rustc-1.27.2-src.tar.gz
-	tar xf rustc-1.27.2-src.tar.gz
-	ln -s rustc-1.27.2-src src
+	wget https://static.rust-lang.org/dist/rustc-${RUST_VERSION}-src.tar.gz
+	tar xvf rustc-${RUST_VERSION}-src.tar.gz
+	if [ -e src ]; then rm src; fi
+	ln -s rustc-${RUST_VERSION}-src src
 fi
